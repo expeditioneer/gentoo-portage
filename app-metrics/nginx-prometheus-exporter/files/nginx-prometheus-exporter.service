@@ -1,0 +1,15 @@
+[Unit]
+Description=Prometheus Nginx Exporter
+Documentation=https://github.com/nginxinc/nginx-prometheus-exporter
+Wants=network-online.target
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/nginx-prometheus-exporter \
+    -nginx.scrape-uri https://127.0.0.1/metrics \
+    -web.listen-address=127.0.0.1:9113
+Restart=always
+User=node_exporter
+
+[Install]
+WantedBy=multi-user.target
