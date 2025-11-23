@@ -5,14 +5,10 @@ EAPI=8
 
 inherit cmake desktop go-env go-module systemd xdg-utils
 
-MY_PN="${PN/-mail/}"
-MY_P="${MY_PN}-${PV}"
-
 DESCRIPTION="Serves Proton Mail to IMAP/SMTP clients"
 HOMEPAGE="https://proton.me/mail/bridge https://github.com/ProtonMail/proton-bridge/"
-SRC_URI="https://github.com/ProtonMail/${MY_PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
+SRC_URI="https://github.com/ProtonMail/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	https://dev.gentoo.org/~expeditioneer/distfiles/${CATEGORY}/${PN}/${P}-vendor.tar.xz"
-S="${WORKDIR}"/${MY_P}
 
 LICENSE="GPL-3+ Apache-2.0 BSD BSD-2 ISC LGPL-3+ MIT MPL-2.0 Unlicense"
 SLOT="0"
@@ -60,7 +56,7 @@ src_prepare() {
 	default
 	if use gui; then
 		# prepare desktop file
-		local desktopFilePath="${S}"/dist/${MY_PN}.desktop
+		local desktopFilePath="${S}"/dist/${PN}.desktop
 		sed -i 's/protonmail/proton-mail/g' ${desktopFilePath} || die
 		sed -i 's/Exec=proton-mail-bridge/Exec=proton-mail-bridge-gui/g' ${desktopFilePath} || die
 
@@ -112,7 +108,7 @@ src_install() {
 			cmake_src_install
 		mv "${ED}"/usr/bin/bridge-gui "${ED}"/usr/bin/${PN}-gui || die
 		newicon {"${S}"/dist/bridge,${PN}}.svg
-		newmenu {dist/${MY_PN},${PN}}.desktop
+		domenu dist/${PN}.desktop
 	fi
 
 	systemd_newuserunit "${FILESDIR}"/${PN}.service-r1 ${PN}.service
